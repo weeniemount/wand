@@ -16,7 +16,7 @@ services:
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/solero/wand/refs/heads/master/icons/db.png
   redis:
-    image: redis:5.0.9-alpine
+    image: redis:7-alpine
     restart: always
     networks:
       - wand
@@ -35,14 +35,18 @@ services:
       - wand
     links:
       - dash:dash
+      - ws_login:ws_login
+      - ws_blizzard:ws_blizzard
+      - ws_glaciar:ws_glaciar
+      - ws_avalanche:ws_avalanche
+      - ws_yeti:ws_yeti
     volumes:
       - ./www:/usr/share/nginx/html
       - ./legacy-media:/usr/share/nginx/legacy
       - ./vanilla-media:/usr/share/nginx/vanilla
       - ./servers.xml:/t/servers.xml
 
-      - ./templates/sites/legacy.conf.template:/etc/nginx/conf.d/legacy.conf.template
-      - ./templates/sites/vanilla.conf.template:/etc/nginx/conf.d/vanilla.conf.template
+      - ./templates/sites/combined.conf.template:/etc/nginx/conf.d/combined.conf.template
       - ./templates/legacy-media/play/index.html.template:/t/legacy/play/index.html.template
       - ./templates/legacy-media/play/es/index.html.template:/t/legacy/play/es/index.html.template
       - ./templates/legacy-media/play/fr/index.html.template:/t/legacy/play/fr/index.html.template
@@ -53,8 +57,7 @@ services:
       - ./templates/vanilla-media/play/pt/index.html.template:/t/vanilla/play/pt/index.html.template
       - ./templates/vanilla-media/media/play/web_service/environment_data.xml.template:/t/vanilla/media/play/web_service/environment_data.xml.template
     command: ["dockerize", 
-              "-template", "/etc/nginx/conf.d/legacy.conf.template:/etc/nginx/conf.d/legacy.conf",
-              "-template", "/etc/nginx/conf.d/vanilla.conf.template:/etc/nginx/conf.d/vanilla.conf",
+              "-template", "/etc/nginx/conf.d/combined.conf.template:/etc/nginx/conf.d/combined.conf",
               "-template", "/t/servers.xml:/usr/share/nginx/legacy/media/servers.xml",
               "-template", "/t/servers.xml:/usr/share/nginx/vanilla/play/servers.xml",
 
@@ -204,7 +207,7 @@ services:
     env_file:
       - .env
     ports:
-      - 3000
+      - "3001:3000"
     volumes:
       - ./dash:/usr/src/dash
       - ./vanilla-media/media/avatar/paper:/usr/src/dash/items
@@ -250,8 +253,52 @@ services:
     entrypoint: ["dockerize", "-wait", "tcp://login:${GAME_LOGIN_PORT}", "python", "./main.py"]
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/solero/wand/refs/heads/master/icons/snowflake.png
+      
+  ws_login:
+    image: python:3.11-slim
+    restart: always
+    networks:
+      - wand
+    links:
+      - houdini_login:houdini_login
+    command: sh -c "pip install --no-cache-dir websockify --quiet && websockify 0.0.0.0:8081 houdini_login:${GAME_LOGIN_PORT}"
+
+  ws_blizzard:
+    image: python:3.11-slim
+    restart: always
+    networks:
+      - wand
+    links:
+      - houdini_blizzard:houdini_blizzard
+    command: sh -c "pip install --no-cache-dir websockify --quiet && websockify 0.0.0.0:8082 houdini_blizzard:9875"
+
+  ws_glaciar:
+    image: python:3.11-slim
+    restart: always
+    networks:
+      - wand
+    links:
+      - houdini_glaciar:houdini_glaciar
+    command: sh -c "pip install --no-cache-dir websockify --quiet && websockify 0.0.0.0:8083 houdini_glaciar:9876"
+
+  ws_avalanche:
+    image: python:3.11-slim
+    restart: always
+    networks:
+      - wand
+    links:
+      - houdini_avalanche:houdini_avalanche
+    command: sh -c "pip install --no-cache-dir websockify --quiet && websockify 0.0.0.0:8084 houdini_avalanche:9877"
+
+  ws_yeti:
+    image: python:3.11-slim
+    restart: always
+    networks:
+      - wand
+    links:
+      - houdini_yeti:houdini_yeti
+    command: sh -c "pip install --no-cache-dir websockify --quiet && websockify 0.0.0.0:8085 houdini_yeti:9878"
 
 networks:
   wand:
     driver: bridge
- 
