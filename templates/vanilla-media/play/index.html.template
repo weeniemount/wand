@@ -26,6 +26,19 @@
 <link type="text/css" rel="stylesheet" href="/sites/default/files/css/css_6sGcdaud_kk5LWaaq4lZk2ZLw8uneQM4wYx5rg2QgOM.css" media="all" />
 <link type="text/css" rel="stylesheet" href="/sites/default/files/css/css_9Heh1u--mIfOomnfZC-JIjM3PxmkhjTogDetvyuVnMU.css" media="all" />
 <link type="text/css" rel="stylesheet" href="/sites/default/files/css/css_5AoaSUlnRluwt_SO1GRzTQdCdcJf0Aw-MqGesNvp_6Y.css" media="all" />
+<script>
+  window.RufflePlayer = window.RufflePlayer || {};
+  window.RufflePlayer.config = {
+    socketProxy: [
+      { host: "club.googleballs.com", port: 6112, proxyUrl: "wss://club.googleballs.com/ws/login" },
+      { host: "club.googleballs.com", port: 9875, proxyUrl: "wss://club.googleballs.com/ws/blizzard" },
+      { host: "club.googleballs.com", port: 9876, proxyUrl: "wss://club.googleballs.com/ws/glaciar" },
+      { host: "club.googleballs.com", port: 9877, proxyUrl: "wss://club.googleballs.com/ws/avalanche" },
+      { host: "club.googleballs.com", port: 9878, proxyUrl: "wss://club.googleballs.com/ws/yeti" },
+    ]
+  };
+</script>
+<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
 <!--[if lte IE 9]>
 <link type="text/css" rel="stylesheet" href="/sites/play.clubpenguin.com/themes/club_penguin/css/ie-lte-9.css?om3jak" media="all" />
