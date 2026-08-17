@@ -1,0 +1,196 @@
+server {
+    server_name {{ .Env.WEB_HOSTNAME }};
+
+    location / {
+        root /usr/share/nginx/vanilla/play/;
+        index index.html index.htm;
+    }
+
+    location /media/ {
+        alias /usr/share/nginx/vanilla/media/;
+        index index.html index.htm;
+    }
+    location = /media { return 301 $scheme://$http_host/media/; }
+
+    location /old/ {
+        alias /usr/share/nginx/legacy/play/;
+        index index.html index.htm;
+    }
+    location = /old { return 301 $scheme://$http_host/old/; }
+
+    location /legacy-media/ {
+        alias /usr/share/nginx/legacy/media/;
+        index index.html index.htm;
+    }
+    location = /legacy-media { return 301 $scheme://$http_host/legacy-media/; }
+
+    location ~ ^/(.*)/penguin/create {
+        proxy_pass http://dash:3000/create/vanilla/$1;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /penguin/create {
+        proxy_pass http://dash:3000/create/vanilla/en;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/(.*)/penguin/activate/(.*) {
+        proxy_pass http://dash:3000/activate/vanilla/$1/$2;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/(.*)/penguin/activate {
+        proxy_pass http://dash:3000/activate/vanilla/$1;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /penguin/activate {
+        proxy_pass http://dash:3000/activate/vanilla/en;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/(.*)/penguin/forgot-password/(.*) {
+        proxy_pass http://dash:3000/password/$1/$2;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/(.*)/penguin/forgot-password {
+        proxy_pass http://dash:3000/password/$1;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /penguin/forgot-password {
+        proxy_pass http://dash:3000/password/en;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/avatar/(.*)/cp$ {
+        proxy_pass http://dash:3000/avatar/$1$is_args$args;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/(.*)/web-service/snfgenerator/session$ {
+        proxy_pass http://dash:3000/session$is_args$args;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /api/v0.2/xxx/game/get/world-name-service/start_world_request {
+        proxy_pass http://dash:3000/swrequest;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /manager {
+        proxy_pass http://dash:3000/manager;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /media/social/autocomplete/v2/search/suggestions {
+        proxy_pass http://dash:3000/autocomplete;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /old/create_account/create_account.php {
+        proxy_pass http://dash:3000/create/legacy;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/old/penguin/activate/(.*) {
+        proxy_pass http://dash:3000/activate/legacy/$1;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /ws/login {
+        proxy_pass http://ws_login:8081;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /ws/blizzard {
+        proxy_pass http://ws_blizzard:8082;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /ws/glaciar {
+        proxy_pass http://ws_glaciar:8083;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /ws/avalanche {
+        proxy_pass http://ws_avalanche:8084;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /ws/yeti {
+        proxy_pass http://ws_yeti:8085;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
