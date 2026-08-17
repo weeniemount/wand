@@ -2,7 +2,7 @@
 
 my own fork of wand that makes it work under a single domain (ie https://club.googleballs.com) and also work with cloudflare tunnels. exposes its TCP connections as websockets and adds ruffle to the main page with a config that redirects the TCP connections to the websockets
 
-if you want to host this yourself change ``club.googleballs.com`` in ``templates/vanilla-media/play/index.html.template`` to your own domain
+if you want to host this yourself change ``club.googleballs.com`` in ``templates/vanilla-media/play/index.html.template`` and ``.env`` to your own domain
 
 Wand makes it easy to configure dash, houdini and a media server utilizing docker & docker-compose.
 
