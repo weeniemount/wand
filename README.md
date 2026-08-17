@@ -1,5 +1,9 @@
 # wand
 
+my own fork of wand that makes it work under a single domain (ie https://club.googleballs.com) and also work with cloudflare tunnels. exposes its TCP connections as websockets and adds ruffle to the main page with a config that redirects the TCP connections to the websockets
+
+if you want to host this yourself change ``club.googleballs.com`` in ``templates/vanilla-media/play/index.html.template`` to your own domain
+
 Wand makes it easy to configure dash, houdini and a media server utilizing docker & docker-compose.
 
 > [!NOTE]
@@ -8,7 +12,7 @@ Wand makes it easy to configure dash, houdini and a media server utilizing docke
 ## Installation script
 **Step 1** run the script
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/solero/wand/master/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/weeniemount/wand/master/install.sh)
 ```
 **Step 2** Answer Questions which are:
 * Database password (Leave blank for random password)
