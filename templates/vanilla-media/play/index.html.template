@@ -27,6 +27,30 @@
 <link type="text/css" rel="stylesheet" href="/sites/default/files/css/css_9Heh1u--mIfOomnfZC-JIjM3PxmkhjTogDetvyuVnMU.css" media="all" />
 <link type="text/css" rel="stylesheet" href="/sites/default/files/css/css_5AoaSUlnRluwt_SO1GRzTQdCdcJf0Aw-MqGesNvp_6Y.css" media="all" />
 <script>
+(function() {
+  const activeSockets = new Set();
+  const NativeWebSocket = window.WebSocket;
+
+  window.WebSocket = function(...args) {
+    const ws = new NativeWebSocket(...args);
+    activeSockets.add(ws);
+    ws.addEventListener('close', () => activeSockets.delete(ws));
+    ws.addEventListener('error', () => activeSockets.delete(ws));
+    return ws;
+  };
+  window.WebSocket.prototype = NativeWebSocket.prototype;
+  Object.setPrototypeOf(window.WebSocket, NativeWebSocket);
+
+  setInterval(() => {
+    activeSockets.forEach(ws => {
+      if (ws.readyState === NativeWebSocket.OPEN) {
+        try { ws.send(new ArrayBuffer(0)); } catch (e) {}
+      }
+    });
+  }, 30000);
+})();
+</script>
+<script>
   window.RufflePlayer = window.RufflePlayer || {};
   window.RufflePlayer.config = {
     socketProxy: [
