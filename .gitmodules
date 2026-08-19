@@ -1,6 +1,6 @@
 [submodule "houdini"]
 	path = houdini
-	url = https://github.com/solero/houdini
+	url = https://github.com/weeniemount/houdini
 [submodule "dash"]
 	path = dash
 	url = https://github.com/solero/dash
